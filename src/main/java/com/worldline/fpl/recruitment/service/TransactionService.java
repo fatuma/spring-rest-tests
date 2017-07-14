@@ -15,18 +15,25 @@ import com.worldline.fpl.recruitment.json.ErrorCode;
 import com.worldline.fpl.recruitment.json.TransactionResponse;
 
 /**
- * Transaction service
- * 
- * @author A525125
+ * Transaction service.
  *
+ * @author A525125
  */
 @Service
 public class TransactionService {
 
+	/** The account service. */
 	private AccountService accountService;
 
+	/** The transaction repository. */
 	private TransactionRepository transactionRepository;
 
+	/**
+	 * Instantiates a new transaction service.
+	 *
+	 * @param accountService the account service
+	 * @param transactionRepository the transaction repository
+	 */
 	@Autowired
 	public TransactionService(AccountService accountService,
 			TransactionRepository transactionRepository) {
@@ -35,13 +42,11 @@ public class TransactionService {
 	}
 
 	/**
-	 * Get transactions by account
-	 * 
-	 * @param accountId
-	 *            the account id
-	 * @param p
-	 *            the pageable object
-	 * @return
+	 * Get transactions by account.
+	 *
+	 * @param accountId            the account id
+	 * @param p            the pageable object
+	 * @return the transactions by account
 	 */
 	public Page<TransactionResponse> getTransactionsByAccount(String accountId,
 			Pageable p) {
@@ -55,10 +60,10 @@ public class TransactionService {
 	}
 
 	/**
-	 * Map {@link Transaction} to {@link TransactionResponse}
-	 * 
-	 * @param transaction
-	 * @return
+	 * Map {@link Transaction} to {@link TransactionResponse}.
+	 *
+	 * @param transaction the transaction
+	 * @return the transaction response
 	 */
 	private TransactionResponse map(Transaction transaction) {
 		TransactionResponse result = new TransactionResponse();

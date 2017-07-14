@@ -15,17 +15,20 @@ import com.worldline.fpl.recruitment.dao.TransactionRepository;
 import com.worldline.fpl.recruitment.entity.Transaction;
 
 /**
- * Implementation of {@link TransactionRepository}
- * 
- * @author A525125
+ * Implementation of {@link TransactionRepository}.
  *
+ * @author A525125
  */
 @Repository
 public class TransactionRepositoryImpl implements TransactionRepository,
 		InitializingBean {
 
+	/** The transactions. */
 	private List<Transaction> transactions;
 
+	/* (non-Javadoc)
+	 * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
+	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		transactions = new ArrayList<>();
@@ -55,6 +58,9 @@ public class TransactionRepositoryImpl implements TransactionRepository,
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see com.worldline.fpl.recruitment.dao.TransactionRepository#getTransactionsByAccount(java.lang.String, org.springframework.data.domain.Pageable)
+	 */
 	@Override
 	public Page<Transaction> getTransactionsByAccount(String accountId,
 			Pageable p) {

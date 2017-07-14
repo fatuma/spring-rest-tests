@@ -12,10 +12,9 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * Transaction json representation
- * 
- * @author A525125
+ * Transaction json representation.
  *
+ * @author A525125
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -24,10 +23,32 @@ import lombok.ToString;
 public class TransactionResponse extends AbstractTransaction implements
 		Serializable {
 
+	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -2371720864101586328L;
 
+	/** The id. */
 	@NotNull
 	@ApiModelProperty(value = "ID", required = true)
 	private String id;
+
+	/**
+	 * Gets the id.
+	 *
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * Sets the id.
+	 *
+	 * @param id the new id
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	
 
 }
