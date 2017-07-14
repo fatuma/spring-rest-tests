@@ -97,6 +97,57 @@ public class TransactionService {
 		
 	}
 	
+	/**
+	 * Adds the transaction.
+	 *
+	 * @param accountId the account id
+	 * @param transaction the transaction
+	 * @return the transaction response
+	 */
+	public TransactionResponse addTransaction(String accountId,Transaction transaction){
+		TransactionResponse response= new TransactionResponse();
+		if(transaction.getBalance() == null){
+			throw new ServiceException(ErrorCode.EMPTY_BALANCE, "balance must not be null");
+			
+		}if(transaction.getNumber() == null){
+
+			throw new ServiceException(ErrorCode.EMPTY_Number, "Number must not be null");
+		}
+		//check if account exist
+		if(!accountService.isAccountExist(accountId)){
+			throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
+		
+		//call the repo to add the transaction 
+		}else{
+			transaction.setAccountId(accountId);
+			response=this.map(transactionRepository.add(transaction));
+		}
+		return response;
+	}
+
+	public TransactionResponse updateTransaction(String accountId, Transaction transaction,String transactionId) {
+		if(transaction.getBalance() == null){
+			throw new ServiceException(ErrorCode.EMPTY_BALANCE, "balance must not be null");
+			
+		}if(transaction.getNumber() == null){
+
+			throw new ServiceException(ErrorCode.EMPTY_Number, "Number must not be null");
+		}
+		//check if account exist
+			if(!accountService.isAccountExist(accountId)){
+					throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
+				}
+	   //check if transaction exist and belong to the account
+			if(!transactionRepository.exist(transactionId)){
+					throw new ServiceException(ErrorCode.INVALID_TRANSACTION, "the transaction doesnt exist");
+				}
+			if(!transactionRepository.isTransactionForAccount(transactionId, accountId)){
+					throw new ServiceException(ErrorCode.INVALID_TRANSACTION_FOR_ACCOUNT, "the transaction doesnt belong to the account");
+				}
+				transaction.setAccountId(accountId);
+				transaction.setId(transactionId);
+		return this.map(transactionRepository.update(transaction));
+	}
 
 
 }

@@ -11,9 +11,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.worldline.fpl.recruitment.controller.TransactionController;
+import com.worldline.fpl.recruitment.entity.Transaction;
 import com.worldline.fpl.recruitment.json.TransactionResponse;
 import com.worldline.fpl.recruitment.service.TransactionService;
 
@@ -68,6 +70,32 @@ public class TransactionControllerImpl implements TransactionController {
 		  transactionService.deleteTransactionByAccount(accountId, transactionId);
 		return ResponseEntity.ok().body(null);
 	}
+
+
+	/**
+	 * Adds the transactions by account.
+	 *
+	 * @param accountId the account id
+	 * @param transaction the transaction
+	 * @return the response entity
+	 */
+	@Override
+	public ResponseEntity<TransactionResponse> addTransactionsByAccount(@PathVariable("accountId")String accountId,
+			@RequestBody Transaction transaction) {
+		
+		TransactionResponse result = transactionService.addTransaction(accountId, transaction);
+		return new ResponseEntity<TransactionResponse>(result, HttpStatus.CREATED);
+	}
+
+	@Override
+	public ResponseEntity<TransactionResponse> updateTransactionsByAccount(@PathVariable("accountId")String accountId, 
+			@PathVariable("transactionId")String transactionId,
+			@RequestBody Transaction transaction) {
+		
+		TransactionResponse result = transactionService.updateTransaction(accountId, transaction,transactionId);
+		return new ResponseEntity<TransactionResponse>(result, HttpStatus.NO_CONTENT);
+	}
+	
 
 
 }

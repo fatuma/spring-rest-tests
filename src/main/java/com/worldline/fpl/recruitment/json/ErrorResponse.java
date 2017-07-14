@@ -1,13 +1,11 @@
 package com.worldline.fpl.recruitment.json;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
@@ -16,7 +14,6 @@ import lombok.Data;
  * @author A525125
  */
 @Data
-@AllArgsConstructor
 @ApiModel(value = "ErrorResponse", description = "Error resource representation")
 public class ErrorResponse implements Serializable {
 

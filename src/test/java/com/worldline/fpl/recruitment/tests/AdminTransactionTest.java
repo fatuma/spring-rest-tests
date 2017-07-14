@@ -89,12 +89,12 @@ public class AdminTransactionTest extends AbstractTest {
 	@Test
 	public void deleteTransactionWhichNotBelongToTheAccount() throws Exception {
 		mockMvc.perform(delete("/accounts/2/transactions/2")).andExpect(
-				status().isNotFound());
+				status().isForbidden());
 	}
 
 	@Test
 	public void deleteUnexistingTransaction() throws Exception {
-		mockMvc.perform(delete("/accounts/1/transactions/1")).andExpect(
+		mockMvc.perform(delete("/accounts/1/transactions/8")).andExpect(
 				status().isNotFound());
 	}
 

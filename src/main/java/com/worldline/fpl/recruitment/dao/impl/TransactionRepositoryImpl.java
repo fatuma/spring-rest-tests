@@ -92,4 +92,19 @@ public class TransactionRepositoryImpl implements TransactionRepository,
 	    		  && accountId.equals(t.getAccountId()));
 	}
 
+	/* (non-Javadoc)
+	 * @see com.worldline.fpl.recruitment.dao.TransactionRepository#addTransaction(com.worldline.fpl.recruitment.entity.Transaction)
+	 */
+	@Override
+	public Transaction add(Transaction transaction) {
+		transactions.add(transaction);
+		return transaction;
+	}
+
+	@Override
+	public Transaction update(Transaction transaction) {
+		transactions.stream().filter(t -> transaction.getId().equals(t.getId())).map(t -> transaction);
+		return transaction;
+	}
+
 }

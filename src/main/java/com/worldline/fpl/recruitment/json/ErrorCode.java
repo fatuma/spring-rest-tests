@@ -1,6 +1,5 @@
 package com.worldline.fpl.recruitment.json;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import org.springframework.http.HttpStatus;
@@ -10,12 +9,13 @@ import org.springframework.http.HttpStatus;
  *
  * @author A525125
  */
-@AllArgsConstructor
 public enum ErrorCode {
 
 	/** The invalid account. */
 	INVALID_ACCOUNT(HttpStatus.NOT_FOUND),
-	INVALID_TRANSACTION_FOR_ACCOUNT(HttpStatus.NOT_FOUND),
+	INVALID_TRANSACTION_FOR_ACCOUNT(HttpStatus.FORBIDDEN),
+	EMPTY_BALANCE(HttpStatus.BAD_REQUEST),
+	EMPTY_Number(HttpStatus.BAD_REQUEST),
 	INVALID_TRANSACTION(HttpStatus.NOT_FOUND);
 
 	/** The http status. */
