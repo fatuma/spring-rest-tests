@@ -72,5 +72,31 @@ public class TransactionService {
 		result.setNumber(transaction.getNumber());
 		return result;
 	}
+	
+	/**
+	 * Delete transaction by account.
+	 *
+	 * @param accountId the account id
+	 * @param transactionId the transaction id
+	 */
+	public void deleteTransactionByAccount(String accountId,String transactionId){
+		//check if account exist
+		if(!accountService.isAccountExist(accountId)){
+			throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
+		}
+		//check if transaction exist and belong to the account
+		if(!transactionRepository.exist(transactionId)){
+			throw new ServiceException(ErrorCode.INVALID_TRANSACTION, "the transaction doesnt exist");
+		}
+		if(!transactionRepository.isTransactionForAccount(transactionId, accountId)){
+			throw new ServiceException(ErrorCode.INVALID_TRANSACTION_FOR_ACCOUNT, "the transaction doesnt belong to the account");
+		}
+		
+		transactionRepository.deleteTransactionByAccount(accountId, transactionId);
+		
+		
+	}
+	
+
 
 }

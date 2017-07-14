@@ -59,4 +59,15 @@ public class TransactionControllerImpl implements TransactionController {
 		return ResponseEntity.ok().body(page);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.worldline.fpl.recruitment.controller.TransactionController#deleteTransactionsByAccount(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public ResponseEntity<Void> deleteTransactionsByAccount(@PathVariable("accountId")String accountId, 
+			@PathVariable("transactionId")String transactionId) {
+		  transactionService.deleteTransactionByAccount(accountId, transactionId);
+		return ResponseEntity.ok().body(null);
+	}
+
+
 }

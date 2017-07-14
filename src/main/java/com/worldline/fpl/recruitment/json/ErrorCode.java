@@ -14,7 +14,9 @@ import org.springframework.http.HttpStatus;
 public enum ErrorCode {
 
 	/** The invalid account. */
-	INVALID_ACCOUNT(HttpStatus.NOT_FOUND);
+	INVALID_ACCOUNT(HttpStatus.NOT_FOUND),
+	INVALID_TRANSACTION_FOR_ACCOUNT(HttpStatus.NOT_FOUND),
+	INVALID_TRANSACTION(HttpStatus.NOT_FOUND);
 
 	/** The http status. */
 	@Getter
