@@ -77,9 +77,14 @@ public class AccountService {
 	 */
 	public AccountDetailsResponse getAccountDetails(String accountId) {
 		log.debug("Find account {}", accountId);
-		Account account = accountRepository.findById(accountId).orElseThrow(
-				() -> new ServiceException(ErrorCode.INVALID_ACCOUNT,
-						"Account doesn't exist"));
+		Account account =  new Account();
+		try {
+			 account = accountRepository.findOne(accountId);
+			
+		} catch (Exception e) {
+			throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "Account doesn't exist");
+		}
+		
 		return mapToAccountDetailsResponse(account);
 	}
 

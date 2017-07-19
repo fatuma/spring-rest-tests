@@ -3,29 +3,47 @@ package com.worldline.fpl.recruitment.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 import lombok.Data;
 
 /**
  * Transaction entity.
+/**
+ * @author micro com midelt
  *
- * @author A525125
  */
 @Data
+@Entity
+@Table(name ="TRANSACTION")
 public class Transaction implements Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 706690724306325415L;
 
 	/** The id. */
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String id;
 
 	/** The account id. */
-	private String accountId;
+	@ManyToOne
+	@JoinColumn(name="ACCOUNT_ID")
+	private Account account;
 
 	/** The number. */
+	@Column
 	private String number;
 
 	/** The balance. */
+	@Column
 	private BigDecimal balance;
 
 	/**
@@ -46,22 +64,23 @@ public class Transaction implements Serializable {
 		this.id = id;
 	}
 
+
 	/**
-	 * Gets the account id.
+	 * Gets the account.
 	 *
-	 * @return the account id
+	 * @return the account
 	 */
-	public String getAccountId() {
-		return accountId;
+	public Account getAccount() {
+		return account;
 	}
 
 	/**
-	 * Sets the account id.
+	 * Sets the account.
 	 *
-	 * @param accountId the new account id
+	 * @param account the new account
 	 */
-	public void setAccountId(String accountId) {
-		this.accountId = accountId;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	/**
@@ -99,5 +118,6 @@ public class Transaction implements Serializable {
 	public void setBalance(BigDecimal balance) {
 		this.balance = balance;
 	}
+	
 	
 }

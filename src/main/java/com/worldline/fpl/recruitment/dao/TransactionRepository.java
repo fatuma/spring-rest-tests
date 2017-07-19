@@ -2,63 +2,33 @@ package com.worldline.fpl.recruitment.dao;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.worldline.fpl.recruitment.entity.Transaction;
 
+// TODO: Auto-generated Javadoc
 /**
  * Transaction repository.
  *
- * @author A525125
+ * @author 
  */
-public interface TransactionRepository {
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, String> {
+	
+	  /** The get transaction by account. */
+  	public static String GET_TRANSACTION_BY_ACCOUNT = "select transaction from Transaction transaction where transaction.account.id=?1";
 
-	/**
-	 * Get transactions by account.
-	 *
-	 * @param accountId            the account id
-	 * @param p            the pageable information
-	 * @return the transactions by account
-	 */
-	Page<Transaction> getTransactionsByAccount(String accountId, Pageable p);
-    
-    /**
-     * Delete transaction by account.
-     *
-     * @param accountId the account id
-     * @param transactionId the transaction id
-     */
-    public void deleteTransactionByAccount(String accountId,String transactionId);
-    
-    /**
-     * Exist.
-     *
-     * @param transactionId the transaction id
-     * @return true, if successful
-     */
-    public boolean exist(String transactionId);
-    
-    /**
-     * Checks if is transaction for account.
-     *
-     * @param transactionId the transaction id
-     * @param accountId the account id
-     * @return true, if is transaction for account
-     */
-    public boolean isTransactionForAccount(String transactionId,String accountId);
-    
-    /**
-     * Adds the transaction.
-     *
-     * @param transaction the transaction
-     * @return the transaction
-     */
-    public Transaction add(Transaction transaction);
-    
-    /**
-     * Update.
-     *
-     * @param transaction the transaction
-     * @return the transaction
-     */
-    public Transaction update(Transaction transaction);
+	    /**
+    	 * Gets the transactions by account.
+    	 *
+    	 * @param accountId the account id
+    	 * @param p the p
+    	 * @return the transactions by account
+    	 */
+    	@Query(GET_TRANSACTION_BY_ACCOUNT)
+	    public Page<Transaction> getTransactionsByAccount(String accountId, Pageable p);
+	
+
 }

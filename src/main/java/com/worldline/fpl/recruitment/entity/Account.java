@@ -4,6 +4,14 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
 import lombok.Data;
 
 /**
@@ -12,27 +20,38 @@ import lombok.Data;
  * @author A525125
  */
 @Data
+@Entity
+@Table(name ="ACCOUNT")
 public class Account implements Serializable {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = -3548441891975414771L;
 
 	/** The id. */
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String id;
 
 	/** The number. */
+	@Column
+	@Size(max=250)
 	private String number;
 
 	/** The type. */
+	@Column
+	@Size(max=250)
 	private String type;
 
 	/** The balance. */
+	@Column
 	private BigDecimal balance;
 
 	/** The creation date. */
+	@Column
 	private Date creationDate;
 
 	/** The is active. */
+	@Column
 	private boolean isActive;
 
 	/**

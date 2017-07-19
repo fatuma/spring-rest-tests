@@ -31,12 +31,13 @@ public class TransactionService {
 	/**
 	 * Instantiates a new transaction service.
 	 *
-	 * @param accountService the account service
-	 * @param transactionRepository the transaction repository
+	 * @param accountService
+	 *            the account service
+	 * @param transactionRepository
+	 *            the transaction repository
 	 */
 	@Autowired
-	public TransactionService(AccountService accountService,
-			TransactionRepository transactionRepository) {
+	public TransactionService(AccountService accountService, TransactionRepository transactionRepository) {
 		this.accountService = accountService;
 		this.transactionRepository = transactionRepository;
 	}
@@ -44,25 +45,25 @@ public class TransactionService {
 	/**
 	 * Get transactions by account.
 	 *
-	 * @param accountId            the account id
-	 * @param p            the pageable object
+	 * @param accountId
+	 *            the account id
+	 * @param p
+	 *            the pageable object
 	 * @return the transactions by account
 	 */
-	public Page<TransactionResponse> getTransactionsByAccount(String accountId,
-			Pageable p) {
+	public Page<TransactionResponse> getTransactionsByAccount(String accountId, Pageable p) {
 		if (!accountService.isAccountExist(accountId)) {
-			throw new ServiceException(ErrorCode.INVALID_ACCOUNT,
-					"Account doesn't exist");
+			throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "Account doesn't exist");
 		}
-		return new PageImpl<TransactionResponse>(transactionRepository
-				.getTransactionsByAccount(accountId, p).getContent().stream()
-				.map(this::map).collect(Collectors.toList()));
+		return new PageImpl<TransactionResponse>(transactionRepository.getTransactionsByAccount(accountId, p)
+				.getContent().stream().map(this::map).collect(Collectors.toList()));
 	}
 
 	/**
 	 * Map {@link Transaction} to {@link TransactionResponse}.
 	 *
-	 * @param transaction the transaction
+	 * @param transaction
+	 *            the transaction
 	 * @return the transaction response
 	 */
 	private TransactionResponse map(Transaction transaction) {
@@ -72,82 +73,112 @@ public class TransactionService {
 		result.setNumber(transaction.getNumber());
 		return result;
 	}
-	
+
 	/**
 	 * Delete transaction by account.
 	 *
-	 * @param accountId the account id
-	 * @param transactionId the transaction id
+	 * @param accountId
+	 *            the account id
+	 * @param transactionId
+	 *            the transaction id
 	 */
-	public void deleteTransactionByAccount(String accountId,String transactionId){
-		//check if account exist
-		if(!accountService.isAccountExist(accountId)){
+	public void deleteTransactionByAccount(String accountId, String transactionId) {
+		Transaction transaction = new Transaction();
+		// check if account exist
+		if (!accountService.isAccountExist(accountId)) {
 			throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
 		}
-		//check if transaction exist and belong to the account
-		if(!transactionRepository.exist(transactionId)){
+		// check if transaction exist and belong to the account
+		if (!transactionRepository.exists(transactionId)) {
+
 			throw new ServiceException(ErrorCode.INVALID_TRANSACTION, "the transaction doesnt exist");
+		} else {
+
+			transaction = transactionRepository.findOne(transactionId);
 		}
-		if(!transactionRepository.isTransactionForAccount(transactionId, accountId)){
-			throw new ServiceException(ErrorCode.INVALID_TRANSACTION_FOR_ACCOUNT, "the transaction doesnt belong to the account");
+
+		if (!accountId.equals(transaction.getAccount().getId())) {
+			throw new ServiceException(ErrorCode.INVALID_TRANSACTION_FOR_ACCOUNT,
+					"the transaction doesnt belong to the account");
 		}
-		
-		transactionRepository.deleteTransactionByAccount(accountId, transactionId);
-		
-		
+
+		transactionRepository.delete(transactionId);
+		;
+
 	}
-	
+
 	/**
 	 * Adds the transaction.
 	 *
-	 * @param accountId the account id
-	 * @param transaction the transaction
+	 * @param accountId
+	 *            the account id
+	 * @param transaction
+	 *            the transaction
 	 * @return the transaction response
 	 */
-	public TransactionResponse addTransaction(String accountId,Transaction transaction){
-		TransactionResponse response= new TransactionResponse();
-		if(transaction.getBalance() == null){
+	public TransactionResponse addTransaction(String accountId, Transaction transaction) {
+		TransactionResponse response = new TransactionResponse();
+		if (transaction.getBalance() == null) {
 			throw new ServiceException(ErrorCode.EMPTY_BALANCE, "balance must not be null");
-			
-		}if(transaction.getNumber() == null){
+
+		}
+		if (transaction.getNumber() == null) {
 
 			throw new ServiceException(ErrorCode.EMPTY_Number, "Number must not be null");
 		}
-		//check if account exist
-		if(!accountService.isAccountExist(accountId)){
+		// check if account exist
+		if (!accountService.isAccountExist(accountId)) {
 			throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
-		
-		//call the repo to add the transaction 
-		}else{
-			transaction.setAccountId(accountId);
-			response=this.map(transactionRepository.add(transaction));
+
+			// call the repo to add the transaction
+		} else {
+			// transaction.setAccount(accountService.getAccountDetails(accountId));;
+			response = this.map(transactionRepository.save(transaction));
 		}
 		return response;
 	}
 
-	public TransactionResponse updateTransaction(String accountId, Transaction transaction,String transactionId) {
-		if(transaction.getBalance() == null){
+	/**
+	 * Update transaction.
+	 *
+	 * @param accountId
+	 *            the account id
+	 * @param transaction
+	 *            the transaction
+	 * @param transactionId
+	 *            the transaction id
+	 * @return the transaction response
+	 */
+	public TransactionResponse updateTransaction(String accountId, Transaction transaction, String transactionId) {
+		if (transaction.getBalance() == null) {
 			throw new ServiceException(ErrorCode.EMPTY_BALANCE, "balance must not be null");
-			
-		}if(transaction.getNumber() == null){
+
+		}
+		if (transaction.getNumber() == null) {
 
 			throw new ServiceException(ErrorCode.EMPTY_Number, "Number must not be null");
 		}
-		//check if account exist
-			if(!accountService.isAccountExist(accountId)){
-					throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
-				}
-	   //check if transaction exist and belong to the account
-			if(!transactionRepository.exist(transactionId)){
-					throw new ServiceException(ErrorCode.INVALID_TRANSACTION, "the transaction doesnt exist");
-				}
-			if(!transactionRepository.isTransactionForAccount(transactionId, accountId)){
-					throw new ServiceException(ErrorCode.INVALID_TRANSACTION_FOR_ACCOUNT, "the transaction doesnt belong to the account");
-				}
-				transaction.setAccountId(accountId);
-				transaction.setId(transactionId);
-		return this.map(transactionRepository.update(transaction));
-	}
+		try {
+			Transaction transactionToUpdate = transactionRepository.findOne(transactionId);
 
+			// check if account exist
+			if (!accountService.isAccountExist(accountId)) {
+				throw new ServiceException(ErrorCode.INVALID_ACCOUNT, "the account doesnt exist");
+			}
+			if (accountId.equals(transactionToUpdate.getAccount().getId())) {
+				throw new ServiceException(ErrorCode.INVALID_TRANSACTION_FOR_ACCOUNT,
+						"the transaction doesnt belong to the account");
+
+			}
+			transactionToUpdate.setBalance(transaction.getBalance());
+			transactionToUpdate.setNumber(transaction.getNumber());
+
+			return this.map(transactionRepository.save(transactionToUpdate));
+
+		} catch (Exception e) {
+			throw new ServiceException(ErrorCode.INVALID_TRANSACTION, "the transaction doesnt exist");
+		}
+
+	}
 
 }

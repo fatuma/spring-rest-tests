@@ -1,11 +1,12 @@
 spring:
   application:
     name: recruitment
-
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
 server:
   port: 8080
   context-path: /api
-  
 logging:
-  level:
-    com.worldline.fpl.recruitment=DEBUG
+  level: com.worldline.fpl.recruitment=DEBUG
